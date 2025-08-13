@@ -6,9 +6,10 @@ export default function Home() {
 
   const handleLogin = async (formData: FormData) => {
     'use server';
+    console.log(formData);
     
-    try {
-      const email = formData.get('email') as string, password = formData.get('password') as string;
+  //   try {
+  //     const email = formData.get('email') as string, password = formData.get('password') as string;
       
       // todo: auth
 
@@ -18,10 +19,10 @@ export default function Home() {
       //   maxAge: 30 * 24 * 60 * 60, // 30 days
       //   path: '/',
       // });
-    } catch (err) {
-      console.error('Login error:', err);
-    } finally {
-    }
+  //   } catch (err) {
+  //     console.error('Login error:', err);
+  //   } finally {
+  //   }
   };
 
   return (
