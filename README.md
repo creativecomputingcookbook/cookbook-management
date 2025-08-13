@@ -20,6 +20,7 @@ Existing and todo...
 - [ ] Allow editing a page (by prefilling existing content)
 - [ ] CRUD tags
 - [ ] Integrate suggested tags
+- [ ] Parsons preview
 - [ ] Authentication
 
 ### Future stuff
