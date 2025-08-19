@@ -15,7 +15,7 @@ It's Next.js with React + TailwindCSS, while interacting with a Google Firestore
 Existing and todo...
 
 - [x] Generate form from schema
-- [ ] Write into database
+- [x] Write into database
 - [ ] Read a list of pages from database
 - [ ] Allow editing a page (by prefilling existing content)
 - [ ] CRUD tags
