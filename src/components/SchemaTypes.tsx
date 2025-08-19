@@ -2,6 +2,13 @@
 
 type InputField = Record<string | number, string | File | InputField[] | undefined>;
 
+interface Schema {
+  id: string;
+  name: string;
+  description?: string;
+  components: SchemaField[];
+}
+
 interface SchemaField {
   id: string;
   type: string;
@@ -21,4 +28,4 @@ interface FormFieldProps {
   hideHeading: boolean;
 }
 
-export type { InputField, SchemaField, FormFieldProps };
+export type { InputField, SchemaField, Schema, FormFieldProps };

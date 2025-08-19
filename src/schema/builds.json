@@ -1,136 +1,141 @@
-[
-    {
-        "id": "gallery",
-        "type": "open_field_list",
-        "name": "Gallery",
-        "description": "Videos (in iframe) or pictures demonstrating various views of the build.",
-        "choices": [
-            {
-                "type": "iframe",
-                "name": "Video",
-                "description": "Enter the YouTube video URL.",
-                "extra_inputs": [
-                    {
-                        "id": "title",
-                        "type": "text",
-                        "name": "Title",
-                        "description": "A short title. Displayed as clickable buttons on the side of the gallery."
-                    }
-                ],
-                "transform": [
-                    "youtube"
-                ],
-                "extra_properties": {
-                    "type": "iframe"
-                },
-                "binding": "src"
-            },
-            {
-                "type": "image",
-                "name": "Image",
-                "description": "An image for the view.",
-                "extra_inputs": [
-                    {
-                        "id": "title",
-                        "type": "text",
-                        "name": "Title",
-                        "description": "A short title. Displayed as clickable buttons on the side of the gallery."
-                    }
-                ],
-                "extra_properties": {
-                    "type": "image"
-                },
-                "binding": "src"
-            }
-        ],
-        "extra_properties": {
-            "type": "gallery"
-        },
-        "binding": "items"
-    },
-    {
-        "id": "introduction",
-        "type": "text",
-        "name": "Introduction",
-        "description": "An introduction for the build.",
-        "extra_properties": {
-            "type": "text",
-            "heading": "Introduction"
-        },
-        "binding": "text"
-    },
-    {
-        "id": "materials",
-        "type": "hidden",
-        "extra_properties": {
-            "fields": [
+{
+    "id": "builds",
+    "name": "Builds",
+    "description": "Builds pages describe each completed project.",
+    "components": [
+        {
+            "id": "gallery",
+            "type": "open_field_list",
+            "name": "Gallery",
+            "description": "Videos (in iframe) or pictures demonstrating various views of the build.",
+            "choices": [
                 {
-                    "heading": "Electronics",
-                    "tags_from": "Electronics"
+                    "type": "iframe",
+                    "name": "Video",
+                    "description": "Enter the YouTube video URL.",
+                    "extra_inputs": [
+                        {
+                            "id": "title",
+                            "type": "text",
+                            "name": "Title",
+                            "description": "A short title. Displayed as clickable buttons on the side of the gallery."
+                        }
+                    ],
+                    "transform": [
+                        "youtube"
+                    ],
+                    "extra_properties": {
+                        "type": "iframe"
+                    },
+                    "binding": "src"
                 },
                 {
-                    "heading": "Supplies",
-                    "tags_from": "Supplies" 
+                    "type": "image",
+                    "name": "Image",
+                    "description": "An image for the view.",
+                    "extra_inputs": [
+                        {
+                            "id": "title",
+                            "type": "text",
+                            "name": "Title",
+                            "description": "A short title. Displayed as clickable buttons on the side of the gallery."
+                        }
+                    ],
+                    "extra_properties": {
+                        "type": "image"
+                    },
+                    "binding": "src"
                 }
             ],
-            "heading": "Materials",
-            "type": "materials"
-        }
-    },
-    {
-        "id": "circuit",
-        "type": "image",
-        "name": "Circuit Assembly",
-        "description": "A picture of the circuit assembly.",
-        "extra_properties": {
-            "type": "circuit"
+            "extra_properties": {
+                "type": "gallery"
+            },
+            "binding": "items"
         },
-        "binding": "src"
-    },
-    {
-        "id": "makecode",
-        "type": "iframe",
-        "name": "MakeCode",
-        "description": "MakeCode component for demonstrating code blocks. Enter the MakeCode URL.",
-        "transform": [
-            "makecode"
-        ],
-        "extra_properties": {
-            "type": "makecode"
+        {
+            "id": "introduction",
+            "type": "text",
+            "name": "Introduction",
+            "description": "An introduction for the build.",
+            "extra_properties": {
+                "type": "text",
+                "heading": "Introduction"
+            },
+            "binding": "text"
         },
-        "binding": "url"
-    },
-    {
-        "id": "subcomponents",
-        "type": "open_field_list",
-        "name": "Subcomponents",
-        "description": "Introduce any subcomponents you have.",
-        "choices": [
-            {
-                "type": "image",
-                "name": "Subcomponent",
-                "description": "Attach an image for the subcomponent.",
-                "binding": "img_src",
-                "extra_inputs": [
+        {
+            "id": "materials",
+            "type": "hidden",
+            "extra_properties": {
+                "fields": [
                     {
-                        "id": "title",
-                        "type": "text",
-                        "name": "Title",
-                        "description": "Title of subcomponent."
+                        "heading": "Electronics",
+                        "tags_from": "Electronics"
                     },
                     {
-                        "id": "text",
-                        "type": "text",
-                        "name": "Description",
-                        "description": "Description of subcomponent."
+                        "heading": "Supplies",
+                        "tags_from": "Supplies" 
                     }
-                ]
+                ],
+                "heading": "Materials",
+                "type": "materials"
             }
-        ],
-        "extra_properties": {
-            "type": "subcomponents",
-            "heading": "Subcomponents"
         },
-        "binding": "fields"
-    }
-]
+        {
+            "id": "circuit",
+            "type": "image",
+            "name": "Circuit Assembly",
+            "description": "A picture of the circuit assembly.",
+            "extra_properties": {
+                "type": "circuit"
+            },
+            "binding": "src"
+        },
+        {
+            "id": "makecode",
+            "type": "iframe",
+            "name": "MakeCode",
+            "description": "MakeCode component for demonstrating code blocks. Enter the MakeCode URL.",
+            "transform": [
+                "makecode"
+            ],
+            "extra_properties": {
+                "type": "makecode"
+            },
+            "binding": "url"
+        },
+        {
+            "id": "subcomponents",
+            "type": "open_field_list",
+            "name": "Subcomponents",
+            "description": "Introduce any subcomponents you have.",
+            "choices": [
+                {
+                    "type": "image",
+                    "name": "Subcomponent",
+                    "description": "Attach an image for the subcomponent.",
+                    "binding": "img_src",
+                    "extra_inputs": [
+                        {
+                            "id": "title",
+                            "type": "text",
+                            "name": "Title",
+                            "description": "Title of subcomponent."
+                        },
+                        {
+                            "id": "text",
+                            "type": "text",
+                            "name": "Description",
+                            "description": "Description of subcomponent."
+                        }
+                    ]
+                }
+            ],
+            "extra_properties": {
+                "type": "subcomponents",
+                "heading": "Subcomponents"
+            },
+            "binding": "fields"
+        }
+    ]
+}

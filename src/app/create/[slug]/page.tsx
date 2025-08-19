@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import SchemaForm from '@/components/SchemaForm';
-import { SchemaField } from '@/components/SchemaTypes';
+import { Schema } from '@/components/SchemaTypes';
 
 export default function CreatePage() {
   const params = useParams();
-  const [schema, setSchema] = useState<SchemaField[]>([]);
+  const [schema, setSchema] = useState<Schema>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,10 +55,16 @@ export default function CreatePage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-sm border p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            Create {params.slug}
-          </h1>
-          <SchemaForm schema={schema} />
+          {
+            schema != undefined ? (<>
+              <h1 className="text-3xl font-bold text-gray-900 mb-8">
+                Create {schema.name} page
+              </h1>
+              <SchemaForm schema={schema} />
+            </>) : (
+              <p>No schema loaded!</p>
+            )
+          }
         </div>
       </div>
     </div>

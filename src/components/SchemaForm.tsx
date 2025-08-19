@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import FormField from './FormField';
-import { InputField, SchemaField } from './SchemaTypes';
+import { InputField, Schema } from './SchemaTypes';
 
 interface SchemaFormProps {
-  schema: SchemaField[];
+  schema: Schema;
 }
 
 export default function SchemaForm({ schema }: SchemaFormProps) {
@@ -23,7 +23,7 @@ export default function SchemaForm({ schema }: SchemaFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const preparedData: InputField[] = [];
-    for (const s of schema) {
+    for (const s of schema.components) {
       if (s.id in formData) {
         preparedData.push(formData[s.id]);
       }
@@ -31,13 +31,20 @@ export default function SchemaForm({ schema }: SchemaFormProps) {
         preparedData.push(s.extra_properties);
       }
     }
-    console.log(preparedData);
+    const body = {
+      schema: schema.id,
+      fields: preparedData,
+      edit: false, // determine if editing existing page
+    }
+    if (pageData) {
+      body.edit = true;
+    }
     fetch('/api/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ fields: preparedData })
+      body: JSON.stringify(body)
     })
     .then(res => res.json())
     .then(data => {
@@ -47,7 +54,7 @@ export default function SchemaForm({ schema }: SchemaFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {schema.map((field, index) => (
+      {schema.components.map((field, index) => (
         <FormField
           key={field.id || index}
           field={field}
