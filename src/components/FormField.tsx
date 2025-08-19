@@ -7,7 +7,7 @@ import SimpleFormField from './SimpleFormField';
 export default function FormField({ field, value, onChange }: FormFieldProps) {
   let initialItems: InputField[] = [];
   if (value) {
-    initialItems = value.fields as InputField[] ?? [];
+    initialItems = value[field.binding ?? "fields"] as InputField[] ?? [];
   }
   const [items, setItems] = useState<InputField[]>(initialItems);
 
@@ -71,28 +71,29 @@ export default function FormField({ field, value, onChange }: FormFieldProps) {
               </button>
             </div>
             
-            {/* Type selector dropdown */}
-            <div className="mb-3">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Type
-              </label>
-              <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={item.type as string || ''}
-                onChange={(e) => updateItem(index, { type: e.target.value })}
-              >
-                <option value="">Select a type...</option>
-                {field.choices?.map((choice, choiceIndex) => (
-                  <option key={choiceIndex} value={choice.type}>
-                    {choice.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Type selector dropdown. Should hide if only one choice */
+              field?.choices?.length && field?.choices?.length > 1 ? (<div className="mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Type
+                </label>
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={item.type as string || ''}
+                  onChange={(e) => updateItem(index, { type: e.target.value })}
+                >
+                  <option value="">Select a type...</option>
+                  {field.choices?.map((choice, choiceIndex) => (
+                    <option key={choiceIndex} value={choice.type}>
+                      {choice.name}
+                    </option>
+                  ))}
+                </select>
+              </div>) : (<></>)
+            }
 
-            {/* Render the selected choice field */}
-            {item.type && field.choices?.map((choice, choiceIndex) => {
-              if (choice.type === item.type) {
+            {/* Render the selected choice field */
+            item && field.choices?.map((choice, choiceIndex) => {
+              if (choice.type === item.type || field.choices?.length == 1) {
                 return (
                   <div key={choiceIndex} className="mb-3">
                     <SimpleFormField
