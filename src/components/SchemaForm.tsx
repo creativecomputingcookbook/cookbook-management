@@ -26,6 +26,10 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
   }
 
   const [formData, setFormData] = useState<Record<string, InputField>>(initialFormData);
+  const [meta, setMeta] = useState<Record<string, string | undefined>>({
+    title: pageData?.title,
+    shortDesc: pageData?.shortDesc,
+  });
 
   const handleFieldChange = (fieldId: string, value: InputField) => {
     setFormData(prev => ({
@@ -47,6 +51,7 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
     }
     const body = {
       schema: schema.id,
+      ...meta,
       fields: preparedData,
       edit: false, // determine if editing existing page
     }
@@ -68,6 +73,27 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {pageData ? <p>
+        You are editing page <span className="font-bold">{pageData.title}</span>.
+      </p> : <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Title
+        </label>
+        <textarea
+          value={meta.title}
+          onChange={(e) => setMeta({ title: e.target.value, shortDesc: meta.shortDesc })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>}
+      <label className="block text-sm font-medium text-gray-700">
+        Short description
+      </label>
+      <p className="text-sm text-gray-500">Short description for homepage listing and social media.</p>
+      <textarea
+        value={meta.shortDesc}
+        onChange={(e) => setMeta({ shortDesc: e.target.value, title: meta.title })}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
       {schema.components.map((field, index) => (
         <FormField
           key={field.id || index}
