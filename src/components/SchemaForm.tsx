@@ -2,16 +2,30 @@
 
 import { useState } from 'react';
 import FormField from './FormField';
-import { InputField, Schema } from './SchemaTypes';
+import { InputField, PageData, Schema } from './SchemaTypes';
 
 interface SchemaFormProps {
   schema: Schema;
+  pageData?: PageData;
 }
 
-export default function SchemaForm({ schema }: SchemaFormProps) {
+export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
   // The form data is an object where the keys are field IDs and values are objects of properties;
   // essentially the handleSubmit should validate each key-value pair and add them to a fields array.
-  const [formData, setFormData] = useState<Record<string, InputField>>({});
+
+  const initialFormData: Record<string, InputField> = {};
+  if (pageData) {
+    for (let i = 0; i < pageData.fields.length; i++) {
+      const pageField = pageData.fields[i], schemaField = schema.components[i];
+      if (!schemaField.extra_properties || Object.keys(schemaField.extra_properties).every(key => 
+        pageField.hasOwnProperty(key) && pageField[key] === schemaField.extra_properties![key]
+      )) {
+        initialFormData[schemaField.id] = pageField;
+      }
+    }
+  }
+
+  const [formData, setFormData] = useState<Record<string, InputField>>(initialFormData);
 
   const handleFieldChange = (fieldId: string, value: InputField) => {
     setFormData(prev => ({

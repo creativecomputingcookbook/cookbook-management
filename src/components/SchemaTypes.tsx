@@ -21,6 +21,15 @@ interface SchemaField {
   transform?: string[];
 };
 
+interface PageData {
+  title: string;
+  thumbnail: string;
+  shortDesc: string;
+  schema?: string
+  tags: string[];
+  fields: InputField[];
+}
+
 interface FormFieldProps {
   field: SchemaField;
   value?: InputField;
@@ -28,4 +37,4 @@ interface FormFieldProps {
   hideHeading: boolean;
 }
 
-export type { InputField, SchemaField, Schema, FormFieldProps };
+export type { InputField, SchemaField, Schema, PageData, FormFieldProps };
