@@ -85,15 +85,17 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>}
-      <label className="block text-sm font-medium text-gray-700">
-        Short description
-      </label>
-      <p className="text-sm text-gray-500">Short description for homepage listing and social media.</p>
-      <textarea
-        value={meta.shortDesc}
-        onChange={(e) => setMeta({ shortDesc: e.target.value, title: meta.title })}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Short description
+        </label>
+        <p className="text-sm text-gray-500">Short description for homepage listing and social media.</p>
+        <textarea
+          value={meta.shortDesc}
+          onChange={(e) => setMeta({ shortDesc: e.target.value, title: meta.title })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
       {schema.components.map((field, index) => (
         <FormField
           key={field.id || index}
