@@ -1,0 +1,80 @@
+{
+    "id": "foundations",
+    "name": "Foundations",
+    "description": "Foundations pages describe each component, or combination of different components.",
+    "components": [
+        {
+            "id": "introduction",
+            "type": "text",
+            "name": "Introduction",
+            "description": "An introduction for the build.",
+            "extra_properties": {
+                "type": "text",
+                "heading": "Introduction"
+            },
+            "binding": "text"
+        },
+        {
+            "id": "circuit",
+            "type": "image",
+            "name": "Circuit Assembly",
+            "description": "A picture of the circuit assembly.",
+            "extra_properties": {
+                "type": "circuit"
+            },
+            "binding": "src"
+        },
+        {
+            "id": "code",
+            "type": "iframe",
+            "name": "Code",
+            "description": "Code component for demonstrating code blocks. Enter the Arduino.cc embed URL.",
+            "transform": [
+                "arduino"
+            ],
+            "extra_properties": {
+                "type": "code",
+                "heading": "Code"
+            },
+            "binding": "url"
+        },
+        {
+            "id": "othercombinations",
+            "type": "page_list",
+            "name": "Other Combinations",
+            "description": "Link to any relevant combination pages.",
+            "extra_properties": {
+                "type": "othercombinations",
+                "heading": "Other Combinations"
+            },
+            "binding": "other"
+        },
+        {
+            "id": "parsons_group",
+            "type": "open_field_list",
+            "name": "Parsons Problems",
+            "description": "Introduce Parsons problems.",
+            "choices": [
+                {
+                    "type": "parsons",
+                    "name": "Parsons code",
+                    "description": "Attach the code for Parsons.",
+                    "binding": "code",
+                    "extra_inputs": [
+                        {
+                            "id": "title",
+                            "type": "text",
+                            "name": "Title",
+                            "description": "Title of the Parsons problem."
+                        }
+                    ]
+                }
+            ],
+            "extra_properties": {
+                "type": "parsons_group",
+                "heading": "Try it yourself!"
+            },
+            "binding": "fields"
+        }
+    ]
+}
