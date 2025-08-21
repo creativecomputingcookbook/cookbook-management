@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InputField, FormFieldProps } from './SchemaTypes';
 import SimpleFormField from './SimpleFormField';
 
@@ -10,10 +10,118 @@ export default function FormField({ field, value, onChange }: FormFieldProps) {
     initialItems = value[field.binding ?? "fields"] as InputField[] ?? [];
   }
   const [items, setItems] = useState<InputField[]>(initialItems);
+  const [availablePages, setAvailablePages] = useState<string[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  // Fetch available pages for page_list type
+  useEffect(() => {
+    if (field.type === 'page_list') {
+      fetch('/api/pages')
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setAvailablePages(data);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching pages:', error);
+        });
+    }
+  }, [field.type]);
 
   // Handle hidden fields (no UI, just extra properties)
   if (field.type === 'hidden') {
     return null;
+  }
+
+  if (field.type === 'page_list') {
+    const currentPages = value ? (value[field.binding ?? field.id] as string[] || []) : [];
+    
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setInputValue(newValue);
+      setShowDropdown(true);
+    };
+
+    const handlePageSelect = (page: string) => {
+      if (!currentPages.includes(page)) {
+        const updatedPages = [...currentPages, page];
+        onChange({ ...value, [field.binding ?? field.id]: updatedPages });
+      }
+      setInputValue('');
+      setShowDropdown(false);
+    };
+
+    const handleRemovePage = (pageToRemove: string) => {
+      const updatedPages = currentPages.filter(page => page !== pageToRemove);
+      onChange({ ...value, [field.binding ?? field.id]: updatedPages });
+    };
+
+    const filteredPages = availablePages.filter(page =>
+      page.toLowerCase().includes(inputValue.toLowerCase()) && !currentPages.includes(page)
+    );
+
+    return (
+      <div className="space-y-2">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {field.name}
+          </label>
+          <p className="text-sm text-gray-500 mb-4">{field.description}</p>
+        </div>
+
+        {/* Display selected pages */}
+        {currentPages.length > 0 && (
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Selected Pages:
+            </label>
+            <div className="space-y-2">
+              {currentPages.map((page, index) => (
+                <div key={index} className="flex items-center justify-between bg-gray-100 px-3 py-2 rounded-md">
+                  <span className="text-sm">{page}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemovePage(page)}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Add new page input */}
+        <div className="relative">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onFocus={() => setShowDropdown(true)}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+            placeholder="Type to search for pages..."
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          
+          {showDropdown && filteredPages.length > 0 && (
+            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+              {filteredPages.map((page, index) => (
+                <div
+                  key={index}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handlePageSelect(page)}
+                >
+                  {page}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
   }
 
   if (field.type === 'open_field_list') {

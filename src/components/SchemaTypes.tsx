@@ -1,6 +1,6 @@
 'use client';
 
-type InputField = Record<string | number, string | File | InputField[] | undefined>;
+type InputField = Record<string | number, string | string[] | File | InputField[] | undefined>;
 
 interface Schema {
   id: string;
