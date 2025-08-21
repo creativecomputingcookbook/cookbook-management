@@ -23,7 +23,7 @@ export default function SimpleFormField({ field, value, onChange, hideHeading }:
       </label>
       <p className="text-sm text-gray-500">{field.description}</p>
       
-      {field.type === 'text' && (
+      {(field.type === 'text' || field.type === 'parsons') && (
         <textarea
           value={value ? (value[field.binding ?? field.id] as string ?? '') : ''}
           onChange={(e) => onChange({[field.binding ?? field.id]: e.target.value})}
