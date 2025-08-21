@@ -21,7 +21,9 @@ export async function POST(
       );
     }
   }
-  docRef.set(body);
-  // TODO: send to database
-  return NextResponse.json({ status: "ok" });
+  if (process.env.WRITE === "1") {
+    docRef.set(body);
+    return NextResponse.json({ status: "ok" });
+  }
+  return NextResponse.json({ status: "write disabled" });
 }
