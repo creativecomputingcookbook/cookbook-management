@@ -16,7 +16,7 @@ Existing and todo...
 
 - [x] Generate form from schema
 - [x] Write into database
-- [ ] Read a list of pages from database
+- [x] Read a list of pages from database
 - [x] Allow editing a page (by prefilling existing content)
 - [ ] CRUD tags
 - [ ] Integrate suggested tags

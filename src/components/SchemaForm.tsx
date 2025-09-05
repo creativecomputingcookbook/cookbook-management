@@ -58,7 +58,7 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
     if (pageData) {
       body.edit = true;
     }
-    fetch('/api/create', {
+    fetch('/api/pages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -70,6 +70,8 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
       alert(JSON.stringify(data));
     });
   };
+
+  // TODO: tag field
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
