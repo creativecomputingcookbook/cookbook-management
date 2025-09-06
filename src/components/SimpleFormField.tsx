@@ -1,6 +1,7 @@
 'use client';
 
 import { InputField, FormFieldProps } from './SchemaTypes';
+import ImageUpload from './ImageUpload';
 
 export default function SimpleFormField({ field, value, onChange, hideHeading }: FormFieldProps) {
   return (
@@ -33,16 +34,9 @@ export default function SimpleFormField({ field, value, onChange, hideHeading }:
       )}
       
       {field.type === 'image' && (
-        <input
-          type="file"
-          accept="image/*"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              onChange({ [field.binding ?? field.id]: file });
-            }
-          }}
+        <ImageUpload
+          value={value ? (value[field.binding ?? field.id] as string) : undefined}
+          onChange={(fileName) => onChange({ [field.binding ?? field.id]: fileName })}
         />
       )}
       
