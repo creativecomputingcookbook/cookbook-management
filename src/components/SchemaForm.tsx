@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import FormField from './FormField';
 import { InputField, PageData, Schema } from './SchemaTypes';
+import ImageUpload from './ImageUpload';
 
 interface SchemaFormProps {
   schema: Schema;
@@ -29,6 +30,7 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
   const [meta, setMeta] = useState<Record<string, string | undefined>>({
     title: pageData?.title,
     shortDesc: pageData?.shortDesc,
+    thumbnail: pageData?.thumbnail,
   });
 
   const handleFieldChange = (fieldId: string, value: InputField) => {
@@ -83,10 +85,20 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
         </label>
         <textarea
           value={meta.title}
-          onChange={(e) => setMeta({ title: e.target.value, shortDesc: meta.shortDesc })}
+          onChange={(e) => setMeta({ ...meta, title: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Thumbnail
+        </label>
+        <p className="text-sm text-gray-500">Thumbnail for homepage listing and social media.</p>
+        <ImageUpload
+          value={meta.thumbnail}
+          onChange={(fileName) => setMeta({ ...meta, thumbnail: fileName })}
+        />
+      </div>
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700">
           Short description
@@ -94,7 +106,7 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
         <p className="text-sm text-gray-500">Short description for homepage listing and social media.</p>
         <textarea
           value={meta.shortDesc}
-          onChange={(e) => setMeta({ shortDesc: e.target.value, title: meta.title })}
+          onChange={(e) => setMeta({ ...meta, shortDesc: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
