@@ -310,7 +310,7 @@ export default function TagInput({ value, onChange, placeholder = "Add tags..." 
             className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg"
           >
             <div className="px-4 py-2 text-gray-500 text-sm">
-              No matching tags found. Press Enter to add "{inputValue}" as a new tag.
+              No matching tags found. Press Enter to add &quot;{inputValue}&quot; as a new tag.
             </div>
           </div>
         )}
@@ -325,7 +325,7 @@ export default function TagInput({ value, onChange, placeholder = "Add tags..." 
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Assign Category for "{newTagName}"
+              Assign Category for &quot;{newTagName}&quot;
             </h3>
             <p className="text-sm text-gray-600 mb-4">
               This is a new tag. Please assign it to a category.

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     let imageMetadata;
     try {
       imageMetadata = await sharp(buffer).metadata();
-    } catch (_) {
+    } catch {
       return NextResponse.json({ 
         error: 'Invalid image file' 
       }, { status: 400 });
