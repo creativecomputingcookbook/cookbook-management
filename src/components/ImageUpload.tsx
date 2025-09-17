@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 
 interface ImageUploadProps {
   value?: string;
@@ -74,7 +75,7 @@ export default function ImageUpload({ value, onChange, className = '' }: ImageUp
       {/* Display existing image */}
       {value && (
         <div className="relative">
-          <img
+          <Image
             src={getImageUrl(value)}
             alt="Current image"
             className="max-w-full h-auto max-h-64 rounded-md border border-gray-300"
