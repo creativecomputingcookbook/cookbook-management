@@ -41,3 +41,42 @@ export async function POST(
   return NextResponse.json({ status: "write disabled" });
 }
 
+export async function DELETE(
+  request: NextRequest,
+) {
+  const { searchParams } = new URL(request.url);
+  const tagName = searchParams.get('name');
+  
+  if (!tagName) {
+    return NextResponse.json(
+      { error: "Tag name is required" },
+      { status: 400 }
+    );
+  }
+  
+  try {
+    const docRef = collection.doc(tagName);
+    const doc = await docRef.get();
+    
+    if (!doc.exists) {
+      return NextResponse.json(
+        { error: `Tag "${tagName}" does not exist` },
+        { status: 404 }
+      );
+    }
+    
+    if (process.env.WRITE === "1") {
+      await docRef.delete();
+      return NextResponse.json({ status: "ok" });
+    }
+    
+    return NextResponse.json({ status: "write disabled" });
+  } catch (error) {
+    console.error('Error deleting tag:', error);
+    return NextResponse.json(
+      { error: "Could not delete tag" },
+      { status: 500 }
+    );
+  }
+}
+
