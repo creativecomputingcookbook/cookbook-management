@@ -4,6 +4,7 @@ import { useState } from 'react';
 import FormField from './FormField';
 import { InputField, PageData, Schema } from './SchemaTypes';
 import ImageUpload from './ImageUpload';
+import TagInput from './TagInput';
 
 interface SchemaFormProps {
   schema: Schema;
@@ -32,6 +33,7 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
     shortDesc: pageData?.shortDesc,
     thumbnail: pageData?.thumbnail,
   });
+  const [tags, setTags] = useState<string[]>(pageData?.tags || []);
 
   const handleFieldChange = (fieldId: string, value: InputField) => {
     setFormData(prev => ({
@@ -54,6 +56,7 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
     const body = {
       schema: schema.id,
       ...meta,
+      tags: tags,
       fields: preparedData,
       edit: false, // determine if editing existing page
     }
@@ -72,8 +75,6 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
       alert(JSON.stringify(data));
     });
   };
-
-  // TODO: tag field
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -99,6 +100,11 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
           onChange={(fileName) => setMeta({ ...meta, thumbnail: fileName })}
         />
       </div>
+      <TagInput
+        value={tags}
+        onChange={setTags}
+        placeholder="Add tags to categorize your page..."
+      />
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700">
           Short description
