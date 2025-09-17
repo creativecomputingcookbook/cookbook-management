@@ -2,6 +2,7 @@
 
 import { InputField, FormFieldProps } from './SchemaTypes';
 import ImageUpload from './ImageUpload';
+import ParsonsProblem from './ParsonsProblem';
 
 export default function SimpleFormField({ field, value, onChange, hideHeading }: FormFieldProps) {
   return (
@@ -24,12 +25,19 @@ export default function SimpleFormField({ field, value, onChange, hideHeading }:
       </label>
       <p className="text-sm text-gray-500">{field.description}</p>
       
-      {(field.type === 'text' || field.type === 'parsons') && (
+      {field.type === 'text' && (
         <textarea
           value={value ? (value[field.binding ?? field.id] as string ?? '') : ''}
           onChange={(e) => onChange({[field.binding ?? field.id]: e.target.value})}
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      )}
+      
+      {field.type === 'parsons' && (
+        <ParsonsProblem
+          value={value ? (value[field.binding ?? field.id] as string ?? '') : ''}
+          onChange={(text) => onChange({[field.binding ?? field.id]: text})}
         />
       )}
       
