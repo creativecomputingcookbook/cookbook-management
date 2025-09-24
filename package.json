@@ -12,7 +12,10 @@
     "@google-cloud/firestore": "^7.11.3",
     "@google-cloud/storage": "^7.17.0",
     "cookies-next": "^6.1.0",
+    "firebase": "^12.3.0",
+    "firebase-admin": "^13.5.0",
     "next": "15.3.4",
+    "next-firebase-auth-edge": "^1.11.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.34.3"
