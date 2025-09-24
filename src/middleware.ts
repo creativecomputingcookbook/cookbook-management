@@ -6,16 +6,14 @@ import {
   redirectToLogin,
   redirectToHome,
 } from 'next-firebase-auth-edge';
-
+import authOptions from '@/utils/authOptions';
 const PUBLIC_PATHS = ['/auth'];
 
 export async function middleware(request: NextRequest) {
   return authMiddleware(request, {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
+    ...authOptions,
     loginPath: '/api/login',
     logoutPath: '/api/logout',
-    cookieName: process.env.AUTH_COOKIE_NAME || 'AuthToken',
-    cookieSignatureKeys: [process.env.COOKIE_SIGNATURE_KEY || 'dev-change-me-32-bytes-long!!!'],
     cookieSerializeOptions: {
       path: '/',
       httpOnly: true,
@@ -23,14 +21,7 @@ export async function middleware(request: NextRequest) {
       sameSite: 'lax',
       maxAge: 30 * 24 * 60 * 60,
     },
-    ...(process.env.NODE_ENV === 'development' ? {
-      serviceAccount: {
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
-        clientEmail: process.env.PRIVATE_CLIENT_EMAIL!,
-        privateKey: process.env.PRIVATE_PRIVATE_KEY!,
-      }
-    } : {}),
-  handleValidToken: async (_tokens: unknown, headers: Headers) => {
+    handleValidToken: async (_, headers: Headers) => {
       // Prevent authenticated users from opening the login page
       if (PUBLIC_PATHS.some((p) => request.nextUrl.pathname.startsWith(p))) {
         return redirectToHome(request);

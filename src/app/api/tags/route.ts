@@ -1,5 +1,6 @@
 import { Firestore } from '@google-cloud/firestore';
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyClaims } from '@/utils/verifyClaims';
 
 const db = new Firestore({
   projectId: 'cwp-11ty',
@@ -7,6 +8,11 @@ const db = new Firestore({
 const collection = db.collection('cwp-tags');
 
 export async function GET() {
+  const claims = await verifyClaims();
+  if (!claims || !claims.admin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  }
+
   try {
     const docs = await collection.get();
     
