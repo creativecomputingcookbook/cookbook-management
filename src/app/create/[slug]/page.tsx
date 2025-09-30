@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import SchemaForm from '@/components/SchemaForm';
 import { Schema } from '@/components/SchemaTypes';
+import Link from 'next/link';
 
 export default function CreatePage() {
   const params = useParams();
@@ -57,9 +58,17 @@ export default function CreatePage() {
         <div className="bg-white rounded-lg shadow-sm border p-8">
           {
             schema != undefined ? (<>
-              <h1 className="text-3xl font-bold text-gray-900 mb-8">
-                Create {schema.name} page
-              </h1>
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Create {schema.name} page
+                </h1>
+                <Link 
+                  href="/"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                >
+                  ← Back to Home
+                </Link>
+              </div>
               <SchemaForm schema={schema} />
             </>) : (
               <p>No schema loaded!</p>
