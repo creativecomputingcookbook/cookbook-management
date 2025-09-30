@@ -78,7 +78,9 @@ export default function ImageUpload({ value, onChange, className = '' }: ImageUp
           <Image
             src={getImageUrl(value)}
             alt="Current image"
-            className="max-w-full h-auto max-h-64 rounded-md border border-gray-300"
+            width={400} // default width for layout
+            height={300} // default height for layout
+            className="w-auto h-auto mx-auto max-h-64 object-contain rounded-md border border-gray-300 p-4"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
