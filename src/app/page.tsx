@@ -1,10 +1,13 @@
 'use client';
 
+import { useClaims } from '@/utils/useClaims';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
+  const claims = useClaims();
   const [pages, setPages] = useState<string[]>([]);
+  const [stagingPages, setStagingPages] = useState<string[]>([]);
   const [schemas, setSchemas] = useState<{ name: string, id: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [schemaLoading, setSchemaLoading] = useState(true);
@@ -26,7 +29,14 @@ export default function Home() {
         setLoading(false);
       }
     };
-
+    const fetchStagingPages = async () => {
+      try {
+        const response = await fetch('/api/staging/pages');
+        if (!response.ok) return;
+        const data = await response.json();
+        setStagingPages(data);
+      } catch {}
+    };
     const fetchSchemas = async () => {
       try {
         const response = await fetch('/api/schemas');
@@ -44,6 +54,7 @@ export default function Home() {
 
     fetchPages();
     fetchSchemas();
+    fetchStagingPages();
   }, []);
 
   return (
@@ -76,17 +87,86 @@ export default function Home() {
               {schemas.map((s) => (
                 <div key={s.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                   <span className="text-lg font-medium text-gray-900">{s.name}</span>
-                  <Link 
-                    href={`/create/${s.id}`}
-                    className="inline-flex items-center mx-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                  >
-                    Create
-                  </Link>
+                  {claims?.admin ? (
+                    <div className="flex flex-row space-x-2 ml-auto">
+                      <Link 
+                        href={`/create/${s.id}`}
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                      >
+                        Create
+                      </Link>
+                      <Link 
+                        href={`/create/${s.id}?draft=true`}
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors"
+                      >
+                        Draft
+                      </Link>
+                    </div>
+                  ) : (
+                    <Link 
+                      href={`/create/${s.id}`}
+                      className="inline-flex items-center mx-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    >
+                      Create
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>
           )}
         </div>
+        {/* Staging section for admin */}
+        {claims?.admin && (
+          <div className="bg-white rounded-lg shadow-sm border p-8 m-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Staging Pages</h1>
+            {stagingPages.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">No staging pages found.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {stagingPages.map((page) => (
+                  <div key={page} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <span className="text-lg font-medium text-gray-900">{page}</span>
+                    <Link 
+                      href={`/edit/${page}?staging=true`}
+                      className="inline-flex items-center px-4 py-2 mx-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors"
+                    >
+                      Edit / Promote
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {/* Staging section for non-admins */}
+        {!claims?.admin && (
+          <div className="bg-white rounded-lg shadow-sm border p-8 m-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Your Draft Pages (Staging)</h1>
+            {stagingPages.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">No draft pages found. Drafts require admin approval to publish.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {stagingPages.map((page) => (
+                  <div key={page} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <span className="text-lg font-medium text-gray-900">{page}</span>
+                    <Link 
+                      href={`/edit/${page}?staging=true`}
+                      className="inline-flex items-center px-4 py-2 mx-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors"
+                    >
+                      Edit Draft
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="mt-4 text-sm text-gray-500">Drafts require admin approval to be published.</div>
+          </div>
+        )}
+        {/* Production pages section (always visible) */}
         <div className="bg-white rounded-lg shadow-sm border p-8 m-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">List of Pages</h1>
           
@@ -114,12 +194,12 @@ export default function Home() {
               {pages.map((pageName) => (
                 <div key={pageName} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                   <span className="text-lg font-medium text-gray-900">{pageName}</span>
-                  <Link 
+                  {claims?.admin && (<Link 
                     href={`/edit/${pageName}`}
                     className="inline-flex items-center px-4 py-2 mx-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     Edit Page
-                  </Link>
+                  </Link>)}
                 </div>
               ))}
             </div>
