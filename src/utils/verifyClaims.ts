@@ -5,8 +5,7 @@ import authOptions from '@/utils/authOptions';
 export async function verifyClaims() {
     const tokens = await getTokens(await cookies(), authOptions);
     if (!tokens) return null;
-    if ((tokens.metadata as {admin?: boolean}).admin && tokens.decodedToken.admin) {
-        return ({ admin: true });
-    }
-    return ({ admin: false });
+    const admin = (tokens.metadata as {admin?: boolean}).admin && tokens.decodedToken.admin;
+    const uid = tokens.decodedToken.uid;
+    return { admin: !!admin, uid };
 }
