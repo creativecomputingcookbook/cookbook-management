@@ -5,6 +5,7 @@ import FormField from './FormField';
 import { InputField, PageData, Schema } from './SchemaTypes';
 import ImageUpload from './ImageUpload';
 import TagInput from './TagInput';
+import { useSearchParams } from 'next/navigation';
 
 interface SchemaFormProps {
   schema: Schema;
@@ -34,6 +35,8 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
     thumbnail: pageData?.thumbnail,
   });
   const [tags, setTags] = useState<string[]>(pageData?.tags || []);
+  const searchParams = useSearchParams();
+  const isDraft = searchParams.get('draft') === 'true' || searchParams.get('staging') === 'true';
 
   const handleFieldChange = (fieldId: string, value: InputField) => {
     setFormData(prev => ({
@@ -59,12 +62,13 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
       tags: tags,
       fields: preparedData,
       edit: false, // determine if editing existing page
-    }
+      staging: isDraft,
+    };
     if (pageData) {
       body.edit = true;
     }
-    fetch('/api/pages', {
-      method: 'POST',
+    fetch(isDraft ? '/api/staging/pages' : '/api/admin/pages', {
+      method: pageData ? 'PATCH' : 'POST',
       headers: {
         'Content-Type': 'application/json'
       },

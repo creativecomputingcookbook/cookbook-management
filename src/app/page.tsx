@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPages = async () => {
       try {
-        const response = await fetch('/api/pages');
+        const response = await fetch('/api/admin/pages');
         if (!response.ok) {
           throw new Error('Failed to fetch pages');
         }

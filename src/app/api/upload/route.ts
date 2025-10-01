@@ -1,18 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Storage } from '@google-cloud/storage';
 import sharp from 'sharp';
+import { verifyClaims } from '@/utils/verifyClaims';
 
 // Initialize Google Cloud Storage
 const storage = new Storage({
   projectId: 'cwp-11ty',
 });
 
-const bucketName = 'cwp-11ty';
+const PROD_BUCKET = 'cwp-11ty';
+const STAGING_BUCKET = 'cwp-11ty-staging';
 
 export async function POST(request: NextRequest) {
   try {
+    const claims = await verifyClaims();
+    if (!claims) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const isStaging = formData.get('staging') === 'true';
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -56,6 +64,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         error: `Image dimensions must be less than ${maxDimension}x${maxDimension} pixels. Current: ${imageMetadata.width}x${imageMetadata.height}` 
       }, { status: 400 });
+    }
+
+    // Only admins can upload to production bucket
+    let bucketName = STAGING_BUCKET;
+    if (!isStaging && claims.admin) {
+      bucketName = PROD_BUCKET;
+    } else if (!isStaging && !claims.admin) {
+      return NextResponse.json({ error: 'Only admins can upload to production bucket' }, { status: 403 });
     }
 
     // Generate unique filename

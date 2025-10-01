@@ -17,7 +17,7 @@ export default function FormField({ field, value, onChange }: FormFieldProps) {
   // Fetch available pages for page_list type
   useEffect(() => {
     if (field.type === 'page_list') {
-      fetch('/api/pages')
+      fetch('/api/admin/pages')
         .then(response => response.json())
         .then(data => {
           if (Array.isArray(data)) {
