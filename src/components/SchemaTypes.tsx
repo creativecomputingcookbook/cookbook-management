@@ -16,7 +16,7 @@ interface SchemaField {
   description?: string;
   choices?: SchemaField[];
   extra_inputs?: SchemaField[];
-  extra_properties?: Record<string, string>;
+  extra_properties?: Record<string, string | Record<string, string>[] | undefined>;
   binding?: string;
   transform?: string[];
 };

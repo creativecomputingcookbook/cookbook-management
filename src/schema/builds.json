@@ -10,6 +10,7 @@
             "description": "Videos (in iframe) or pictures demonstrating various views of the build.",
             "choices": [
                 {
+                    "id": "video",
                     "type": "iframe",
                     "name": "Video",
                     "description": "Enter the YouTube video URL.",
@@ -30,6 +31,7 @@
                     "binding": "src"
                 },
                 {
+                    "id": "image",
                     "type": "image",
                     "name": "Image",
                     "description": "An image for the view.",
@@ -111,6 +113,7 @@
             "description": "Introduce any subcomponents you have.",
             "choices": [
                 {
+                    "id": "img_src",
                     "type": "image",
                     "name": "Subcomponent",
                     "description": "Attach an image for the subcomponent.",
