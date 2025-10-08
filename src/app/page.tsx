@@ -3,9 +3,11 @@
 import { useClaims } from '@/utils/useClaims';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const claims = useClaims();
+  const router = useRouter();
   const [pages, setPages] = useState<string[]>([]);
   const [stagingPages, setStagingPages] = useState<string[]>([]);
   const [schemas, setSchemas] = useState<{ name: string, id: string }[]>([]);
@@ -57,9 +59,22 @@ export default function Home() {
     fetchStagingPages();
   }, []);
 
+  async function handleLogout() {
+    await fetch('/api/logout', { method: 'POST' });
+    router.push('/auth');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto px-4">
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
         <div className="bg-white rounded-lg shadow-sm border p-8 m-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Create new page from schema...</h1>
           
