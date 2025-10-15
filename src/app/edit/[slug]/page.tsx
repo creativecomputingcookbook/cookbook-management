@@ -21,7 +21,7 @@ export default function EditPage() {
     const loadSchema = async () => {
       try {
         const slug = params.slug as string;
-        const response = await fetch(`/api/page/${slug}`);
+        const response = await fetch(`/api/${isDraft ? 'staging/' : ''}page/${slug}`);
         
         if (!response.ok) {
           throw new Error(`Page not found: ${slug}.`);

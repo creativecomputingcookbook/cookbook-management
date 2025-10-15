@@ -57,7 +57,7 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: `Page "${pageName}" does not exist in staging` }, { status: 404 });
   }
   const docData = doc.data();
-  if (!docData || docData.user !== user) {
+  if ((!docData || docData.user !== user) && !claims?.admin) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
   if (process.env.WRITE === "1") {

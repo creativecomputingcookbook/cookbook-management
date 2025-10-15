@@ -33,7 +33,7 @@ export default function Home() {
     };
     const fetchStagingPages = async () => {
       try {
-        const response = await fetch('/api/staging/pages');
+        const response = await fetch(claims?.admin ? '/api/admin/pages?staging=true' : '/api/staging/pages');
         if (!response.ok) return;
         const data = await response.json();
         setStagingPages(data);
@@ -57,7 +57,7 @@ export default function Home() {
     fetchPages();
     fetchSchemas();
     fetchStagingPages();
-  }, []);
+  }, [claims?.admin]);
 
   async function handleLogout() {
     await fetch('/api/logout', { method: 'POST' });
@@ -119,10 +119,10 @@ export default function Home() {
                     </div>
                   ) : (
                     <Link 
-                      href={`/create/${s.id}`}
-                      className="inline-flex items-center mx-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                      href={`/create/${s.id}?draft=true`}
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors"
                     >
-                      Create
+                      Draft
                     </Link>
                   )}
                 </div>

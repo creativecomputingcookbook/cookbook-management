@@ -10,10 +10,12 @@ const stagingCollection = db.collection('cwp-pages-staging');
 // DELETE: Admin deletes any page (staging or production)
 // POST: Admin creates a new page (staging or production)
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const docs = await prodCollection.get();
-    
+    const { searchParams } = new URL(request.url);
+    const staging = searchParams.get('staging') === 'true';
+    const collection = staging ? stagingCollection : prodCollection;
+    const docs = await collection.get();
     return NextResponse.json(docs.docs.map(d => d.id));
   } catch (error) {
     console.error('Error loading page list:', error);
