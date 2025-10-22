@@ -61,10 +61,14 @@ export default function LoginPage() {
         handleCodeInApp: true,
       });
       window.localStorage.setItem('emailForSignIn', email);
-      setInfo('A sign-in link has been sent to your email. Please check your inbox.');
+      setInfo('A sign-in link has been sent to your email if it has been authorized to access. Please check your inbox.');
     } catch (err: unknown) {
-      const msg = err && typeof err === 'object' && 'message' in err ? (err as { message?: unknown }).message : String(err);
-      setError(String(msg));
+      const msg = err && typeof err === 'object' && 'message' in err ? String((err as { message?: string }).message) : String(err);
+      if (msg.includes('Unauthorized email')) {
+        setInfo('A sign-in link has been sent to your email if it has been authorized to access. Please check your inbox.');
+      }
+      else if (msg.includes('Too many requests. Try again later.')) setError('Too many requests. Please try again later.');
+      else setError(msg);
     } finally {
       setLoading(false);
     }
