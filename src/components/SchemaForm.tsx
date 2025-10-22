@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import FormField from './FormField';
-import { InputField, PageData, Schema } from './SchemaTypes';
+import { InputField, PageData, Schema, SchemaField } from './SchemaTypes';
 import ImageUpload from './ImageUpload';
 import TagInput from './TagInput';
 import { useSearchParams } from 'next/navigation';
@@ -45,16 +45,65 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
     }));
   };
 
+  const transformYouTube = (url: string): string | null => {
+    const patterns = [
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
+      /(?:https?:\/\/)?youtu\.be\/([a-zA-Z0-9_-]+)/,
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]+)/
+    ];
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) {
+        return `https://www.youtube.com/embed/${match[1]}`;
+      }
+    }
+    return null;
+  };
+
+  const iFrameValidator = (s: SchemaField, f: InputField): InputField => {
+      if (s.type === 'iframe' && s.transform?.includes('youtube')) {
+        const key = s.binding ?? s.id;
+        const currentValue = f[key];
+        if (typeof currentValue === 'string') {
+          const transformed = transformYouTube(currentValue);
+          if (transformed) {
+            f[key] = transformed;
+            return f;
+          } else {
+            throw Error(`Invalid YouTube link for field "${s.name}". Please provide a valid YouTube video URL.`);
+          }
+        }
+      }
+      return f;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const preparedData: InputField[] = [];
-    for (const s of schema.components) {
-      if (s.id in formData) {
-        preparedData.push(formData[s.id]);
+    try {
+      for (const s of schema.components) {
+        if (s.id in formData) {
+          if (s.type === 'open_field_list') {
+            const key = s.binding ?? s.id;
+            const currentValue = formData[s.id]?.[key];
+            if (Array.isArray(currentValue)) {
+              formData[s.id][key] = (currentValue as InputField[]).map(item => {
+                const schemaField = s.choices?.find(choice => choice.type === item.type);
+                if (!schemaField) throw Error(`Invalid item type "${item.type}" in open field list "${s.name}".`);
+                return iFrameValidator(schemaField, item);
+              });
+            }
+          }
+          else formData[s.id] = iFrameValidator(s, formData[s.id]);
+          preparedData.push(formData[s.id]);
+        }
+        if (s.type == 'hidden' && s.extra_properties) {
+          preparedData.push(s.extra_properties);
+        }
       }
-      if (s.type == 'hidden' && s.extra_properties) {
-        preparedData.push(s.extra_properties);
-      }
+    } catch (err: unknown) {
+      alert((err as { message: unknown }).message);
+      return;
     }
     const body = {
       schema: schema.id,
