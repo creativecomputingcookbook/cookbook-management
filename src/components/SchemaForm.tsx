@@ -118,7 +118,9 @@ export default function SchemaForm({ schema, pageData }: SchemaFormProps) {
           value={meta.shortDesc}
           onChange={(e) => setMeta({ ...meta, shortDesc: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          maxLength={100}
         />
+        <p className="text-sm text-gray-500">{(meta.shortDesc || '').length}/100 characters</p>
       </div>
       {schema.components.map((field, index) => (
         <FormField
