@@ -6,7 +6,6 @@ import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailL
 import { initializeApp, getApps } from 'firebase/app';
 import { useRouter } from 'next/navigation';
 
-// TODO: Replace with your Firebase config
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -20,12 +19,14 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [pageLoading, setPageLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [info, setInfo] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const auth = getAuth();
     if (typeof window !== 'undefined' && isSignInWithEmailLink(auth, window.location.href)) {
+      setPageLoading(true);
       const storedEmail = window.localStorage.getItem('emailForSignIn');
       if (storedEmail) {
         signInWithEmailLink(auth, storedEmail, window.location.href)
@@ -76,10 +77,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <Head>
-        <title>Login | My App</title>
-        <meta name="description" content="Welcome to My App" />
-      </Head>
+      {pageLoading ? (
+        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Signing you in...</p>
+        </div>
+      ) : (
+        <>
+          <Head>
+            <title>Login | My App</title>
+            <meta name="description" content="Welcome to My App" />
+          </Head>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
@@ -96,20 +104,6 @@ export default function LoginPage() {
               </div>
             </div>
           )}
-          {/* {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
-            </div>
-          )} */}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
@@ -134,6 +128,7 @@ export default function LoginPage() {
           )}
         </div>
       </div>
+      </>)}
     </div>
   );
 }
