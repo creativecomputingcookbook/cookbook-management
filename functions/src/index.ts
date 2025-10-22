@@ -60,6 +60,50 @@ export const beforeemailsent = beforeEmailSent(
       throw new HttpsError("invalid-argument", "Missing email");
     }
 
+    // Global rate limiting
+    const db = getFirestore();
+    const globalLimitDoc = db.collection("ccc-rate-limits").doc("global");
+    const now = Date.now();
+    const windowMs = 60 * 60 * 1000; // 1 hour
+    const globalMaxAttempts = 20; // Global limit per hour
+
+    const doc = await globalLimitDoc.get();
+    let attempts = [];
+    if (doc.exists) {
+      attempts = doc.data()?.attempts || [];
+      attempts = attempts.filter((ts: number) => now - ts < windowMs);
+    }
+
+    if (attempts.length >= globalMaxAttempts) {
+      throw new HttpsError(
+        "resource-exhausted",
+        "Too many requests. Try again later.",
+      );
+    }
+
+    attempts.push(now);
+    await globalLimitDoc.set({attempts});
+
+    // Per-IP rate limiting
+    const ip = event.ipAddress;
+    const ipLimitDoc = db.collection("ccc-rate-limits").doc(`ip-${ip}`);
+    const ipDoc = await ipLimitDoc.get();
+    let ipAttempts = [];
+    if (ipDoc.exists) {
+      ipAttempts = ipDoc.data()?.attempts || [];
+      ipAttempts = ipAttempts.filter((ts: number) => now - ts < windowMs);
+    }
+
+    if (ipAttempts.length >= 4) {
+      throw new HttpsError(
+        "resource-exhausted",
+        "Too many requests. Try again later.",
+      );
+    }
+
+    ipAttempts.push(now);
+    await ipLimitDoc.set({attempts: ipAttempts});
+
     // Check if account already exists
     try {
       const auth = getAuth();
