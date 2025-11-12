@@ -18,7 +18,7 @@
             "id": "circuit",
             "type": "image",
             "name": "Circuit Assembly",
-            "description": "A picture of the circuit assembly.",
+            "description": "A picture of the circuit assembly. Use <a href=\"https://docs.google.com/presentation/d/14PSkZWNgF_Ard2_U5vao2H7x7XiD0aWRXZO-mPLCf98/edit?usp=sharing\" target=\"_blank\" rel=\"noreferrer\">this template</a> to create your own circuit assembly diagram.",
             "extra_properties": {
                 "type": "circuit"
             },
