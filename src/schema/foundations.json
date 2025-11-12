@@ -29,9 +29,7 @@
             "type": "iframe",
             "name": "Code",
             "description": "Code component for demonstrating code blocks. Enter the Arduino.cc embed URL.",
-            "transform": [
-                "arduino"
-            ],
+            "transform": "arduino",
             "extra_properties": {
                 "type": "code",
                 "heading": "Code"

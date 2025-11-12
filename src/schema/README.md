@@ -30,7 +30,11 @@ Image. Should allow upload.
 
 IFrame. Should ask for the frame source.
 
-The `transform` property is intended to validate the URL; it does not need to be implemented yet.
+The `transform` property is intended to validate the URL. Three possible transforms:
+
+* `"youtube"` should check for YouTube iFrame link.
+* `"makecode"` should check for Makecode editor link.
+* `"arduino"` should check for Arduino embed link.
 
 ### `open_field_list`
 

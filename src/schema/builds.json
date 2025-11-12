@@ -22,9 +22,7 @@
                             "description": "A short title. Displayed as clickable buttons on the side of the gallery."
                         }
                     ],
-                    "transform": [
-                        "youtube"
-                    ],
+                    "transform": "youtube",
                     "extra_properties": {
                         "type": "iframe"
                     },
@@ -98,9 +96,7 @@
             "type": "iframe",
             "name": "MakeCode",
             "description": "MakeCode component for demonstrating code blocks. Enter the MakeCode URL.",
-            "transform": [
-                "makecode"
-            ],
+            "transform": "makecode",
             "extra_properties": {
                 "type": "makecode"
             },
