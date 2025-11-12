@@ -68,7 +68,10 @@ export default function FormField({ field, value, onChange }: FormFieldProps) {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             {field.name}
           </label>
-          <p className="text-sm text-gray-500 mb-4">{field.description}</p>
+            <p
+              className="text-sm text-gray-500 mb-4"
+              dangerouslySetInnerHTML={{ __html: field.description ?? '' }}
+            />
         </div>
 
         {/* Display selected pages */}
@@ -152,7 +155,10 @@ export default function FormField({ field, value, onChange }: FormFieldProps) {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             {field.name}
           </label>
-          <p className="text-sm text-gray-500 mb-4">{field.description}</p>
+          <p
+            className="text-sm text-gray-500 mb-4"
+            dangerouslySetInnerHTML={{ __html: field.description ?? '' }}
+          />
         </div>
 
         {field.extra_inputs?.map((extraField, extraIndex) => (
