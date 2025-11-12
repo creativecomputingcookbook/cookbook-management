@@ -20,7 +20,7 @@ A placeholder field that contains no inputs. Should be combined with an `extra_p
 
 ### `text`
 
-Text.
+Text. Additional boolean property `short` exists; if true then it should be a one-liner.
 
 ### `image`
 

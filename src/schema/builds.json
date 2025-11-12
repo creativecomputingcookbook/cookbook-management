@@ -19,7 +19,8 @@
                             "id": "title",
                             "type": "text",
                             "name": "Title",
-                            "description": "A short title. Displayed as clickable buttons on the side of the gallery."
+                            "description": "A short title. Displayed as clickable buttons on the side of the gallery.",
+                            "short": true
                         }
                     ],
                     "transform": "youtube",
@@ -38,7 +39,8 @@
                             "id": "title",
                             "type": "text",
                             "name": "Title",
-                            "description": "A short title. Displayed as clickable buttons on the side of the gallery."
+                            "description": "A short title. Displayed as clickable buttons on the side of the gallery.",
+                            "short": true
                         }
                     ],
                     "extra_properties": {
@@ -119,7 +121,8 @@
                             "id": "title",
                             "type": "text",
                             "name": "Title",
-                            "description": "Title of subcomponent."
+                            "description": "Title of subcomponent.",
+                            "short": true
                         },
                         {
                             "id": "text",

@@ -64,7 +64,8 @@
                             "id": "title",
                             "type": "text",
                             "name": "Title",
-                            "description": "Title of the Parsons problem."
+                            "description": "Title of the Parsons problem.",
+                            "short": true
                         }
                     ]
                 }

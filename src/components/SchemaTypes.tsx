@@ -19,6 +19,7 @@ interface SchemaField {
   extra_properties?: Record<string, string | Record<string, string>[] | undefined>;
   binding?: string;
   transform?: string;
+  short?: boolean;
 };
 
 interface PageData {
