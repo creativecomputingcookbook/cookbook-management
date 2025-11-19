@@ -23,7 +23,7 @@
                             "short": true
                         }
                     ],
-                    "transform": "youtube",
+                    "transform": ["youtube"],
                     "extra_properties": {
                         "type": "iframe"
                     },

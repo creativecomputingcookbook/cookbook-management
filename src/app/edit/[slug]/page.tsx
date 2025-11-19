@@ -47,7 +47,7 @@ export default function EditPage() {
     if (params.slug) {
       loadSchema();
     }
-  }, [params.slug]);
+  }, [isDraft, params.slug]);
 
   async function handleDelete() {
     if (!params.slug) return;
