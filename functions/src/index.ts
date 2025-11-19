@@ -35,7 +35,7 @@ initializeApp();
 
 // https://firebase.google.com/docs/functions/auth-blocking-events
 export const beforecreated = beforeUserCreated(
-  {maxInstances: 1}, async (event) => {
+  {maxInstances: 5}, async (event) => {
     const user = event.data;
     const email = user?.email;
     if (!email) {
@@ -54,7 +54,7 @@ export const beforecreated = beforeUserCreated(
   });
 
 export const beforeemailsent = beforeEmailSent(
-  {maxInstances: 1}, async (event) => {
+  {maxInstances: 5}, async (event) => {
     const email = event.additionalUserInfo?.email;
     if (!email) {
       throw new HttpsError("invalid-argument", "Missing email");
@@ -111,6 +111,7 @@ export const beforeemailsent = beforeEmailSent(
       if (!existingUser) {
         throw new HttpsError("internal", "Existing user object missing");
       }
+      console.log(`Allowing email to be sent to existing user: ${email}`);
       return {};
     } catch (err: any) {
       // If error is user-not-found, check allowed emails
@@ -120,6 +121,7 @@ export const beforeemailsent = beforeEmailSent(
         if (!doc.exists) {
           throw new HttpsError("invalid-argument", "Unauthorized email");
         }
+        console.log(`Allowing email to be sent to new user: ${email}`);
         return {};
       } else {
         throw err;
