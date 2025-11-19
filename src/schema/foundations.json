@@ -28,8 +28,8 @@
             "id": "code",
             "type": "iframe",
             "name": "Code",
-            "description": "Code component for demonstrating code blocks. Enter the Arduino.cc embed URL.",
-            "transform": "arduino",
+            "description": "Code component for demonstrating code blocks. Enter the MakeCode or Arduino URL.",
+            "transform": ["arduino", "makecode"],
             "extra_properties": {
                 "type": "code",
                 "heading": "Code"

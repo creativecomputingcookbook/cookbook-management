@@ -96,11 +96,12 @@
         {
             "id": "makecode",
             "type": "iframe",
-            "name": "MakeCode",
-            "description": "MakeCode component for demonstrating code blocks. Enter the MakeCode URL.",
-            "transform": "makecode",
+            "name": "Code",
+            "description": "Code component for demonstrating code blocks. Enter the MakeCode or Arduino URL.",
+            "transform": ["arduino", "makecode"],
             "extra_properties": {
-                "type": "makecode"
+                "type": "makecode",
+                "heading": "Code"
             },
             "binding": "url"
         },

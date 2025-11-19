@@ -18,7 +18,7 @@ interface SchemaField {
   extra_inputs?: SchemaField[];
   extra_properties?: Record<string, string | Record<string, string>[] | undefined>;
   binding?: string;
-  transform?: string;
+  transform?: string[];
   short?: boolean;
 };
 

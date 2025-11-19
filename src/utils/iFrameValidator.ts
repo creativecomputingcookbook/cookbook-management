@@ -16,7 +16,7 @@ export function iFrameValidator(s: SchemaField, f: InputField): InputField {
   return f;
 }
 
-function transformUrl(type: string, url: string): string | null {
+function transformUrl(types: string[], url: string): string | null {
   const patterns: Record<string, { match: RegExp[], to: string }> = {
     youtube: {
       match: [
@@ -40,11 +40,13 @@ function transformUrl(type: string, url: string): string | null {
       to: "https://app.arduino.cc/sketches/{1}?view-mode=embed",
     }
   };
-  if (!patterns[type]) return null;
-  for (const pattern of patterns[type].match) {
-    const match = url.match(pattern);
-    if (match) {
-      return patterns[type].to.replace(/{([0-9]+)}/g, (s) => match[parseInt(s)] ?? '');
+  for (const type of types) {
+    if (!patterns[type]) continue;
+    for (const pattern of patterns[type].match) {
+      const match = url.match(pattern);
+      if (match) {
+        return patterns[type].to.replace(/{([0-9]+)}/g, (s) => match[parseInt(s)] ?? '');
+      }
     }
   }
   return null;
