@@ -26,8 +26,11 @@ export default function SimpleFormField({ field, value, onChange, hideHeading }:
       <label className="block text-sm font-medium text-gray-700">
         {field.name}
       </label>
-      <p className="text-sm text-gray-500">{field.description}</p>
-      
+      <p
+        className="text-sm text-gray-500 mb-4"
+        dangerouslySetInnerHTML={{ __html: field.description ?? '' }}
+      />
+
       {field.type === 'text' && (
         <textarea
           value={value ? (value[field.binding ?? field.id] as string ?? '') : ''}
